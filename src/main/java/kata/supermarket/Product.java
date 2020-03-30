@@ -17,6 +17,10 @@ public class Product {
         return pricePerUnit;
     }
 
+    Department department() {
+        return department;
+    }
+
     public Item oneOf() {
         return new ItemByUnit(this);
     }

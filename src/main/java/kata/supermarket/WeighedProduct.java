@@ -17,6 +17,10 @@ public class WeighedProduct {
         return pricePerKilo;
     }
 
+    Department department() {
+        return department;
+    }
+
     public Item weighing(final BigDecimal kilos) {
         return new ItemByWeight(this, kilos);
     }

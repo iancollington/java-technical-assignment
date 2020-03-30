@@ -6,8 +6,11 @@ public class Product {
 
     private final BigDecimal pricePerUnit;
 
-    public Product(final BigDecimal pricePerUnit) {
+    private final Department department;
+
+    public Product(final BigDecimal pricePerUnit, final Department department) {
         this.pricePerUnit = pricePerUnit;
+        this.department = department;
     }
 
     BigDecimal pricePerUnit() {

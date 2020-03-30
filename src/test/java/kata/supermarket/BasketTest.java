@@ -14,6 +14,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class BasketTest {
 
+    private static final Department UNKNOWN_DEPARTMENT = new Department("UNKNOWN");
+
+    private static final Department DAIRY_DEPARTMENT = new Department("DAIRY");
+
+    private static final PricingDiscount BOGOF_DISCOUNT = new BogofPricingDiscount("BOGOF on dairy", DAIRY_DEPARTMENT);
+
     @DisplayName("basket provides its total value when containing...")
     @MethodSource
     @ParameterizedTest(name = "{0}")
@@ -61,15 +67,15 @@ class BasketTest {
     }
 
     private static Item aPintOfMilk() {
-        return new Product(new BigDecimal("0.49")).oneOf();
+        return new Product(new BigDecimal("0.49"), DAIRY_DEPARTMENT).oneOf();
     }
 
     private static Item aPackOfDigestives() {
-        return new Product(new BigDecimal("1.55")).oneOf();
+        return new Product(new BigDecimal("1.55"), UNKNOWN_DEPARTMENT).oneOf();
     }
 
     private static WeighedProduct aKiloOfAmericanSweets() {
-        return new WeighedProduct(new BigDecimal("4.99"));
+        return new WeighedProduct(new BigDecimal("4.99"), UNKNOWN_DEPARTMENT);
     }
 
     private static Item twoFiftyGramsOfAmericanSweets() {
@@ -77,7 +83,7 @@ class BasketTest {
     }
 
     private static WeighedProduct aKiloOfPickAndMix() {
-        return new WeighedProduct(new BigDecimal("2.99"));
+        return new WeighedProduct(new BigDecimal("2.99"), UNKNOWN_DEPARTMENT);
     }
 
     private static Item twoHundredGramsOfPickAndMix() {
@@ -87,14 +93,14 @@ class BasketTest {
     private static Arguments twoPintsOfMilkWithDiscount() {
         return Arguments.of("two pints of milk", "0.49",
                             Arrays.asList(aPintOfMilk(), aPintOfMilk()),
-                            Arrays.asList(new BogofPricingDiscount())
+                            Arrays.asList(BOGOF_DISCOUNT)
                            );
     }
 
     private static Arguments threePintsOfMilkWithDiscount() {
         return Arguments.of("three pints of milk", "0.98",
                             Arrays.asList(aPintOfMilk(), aPintOfMilk(), aPintOfMilk()),
-                            Arrays.asList(new BogofPricingDiscount())
+                            Arrays.asList(BOGOF_DISCOUNT)
                            );
     }
 }

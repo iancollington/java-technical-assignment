@@ -6,8 +6,11 @@ public class WeighedProduct {
 
     private final BigDecimal pricePerKilo;
 
-    public WeighedProduct(final BigDecimal pricePerKilo) {
+    private final Department department;
+
+    public WeighedProduct(final BigDecimal pricePerKilo, final Department department) {
         this.pricePerKilo = pricePerKilo;
+        this.department = department;
     }
 
     BigDecimal pricePerKilo() {

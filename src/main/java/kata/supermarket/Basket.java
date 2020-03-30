@@ -9,12 +9,19 @@ import java.util.List;
 public class Basket {
     private final List<Item> items;
 
+    private final List<PricingDiscount> pricingDiscounts;
+
     public Basket() {
         this.items = new ArrayList<>();
+        this.pricingDiscounts = new ArrayList<>();
     }
 
     public void add(final Item item) {
         this.items.add(item);
+    }
+
+    public void add(final PricingDiscount pricingDiscount) {
+        this.pricingDiscounts.add(pricingDiscount);
     }
 
     List<Item> items() {

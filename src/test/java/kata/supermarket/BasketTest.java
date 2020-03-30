@@ -17,43 +17,47 @@ class BasketTest {
     @DisplayName("basket provides its total value when containing...")
     @MethodSource
     @ParameterizedTest(name = "{0}")
-    void basketProvidesTotalValue(String description, String expectedTotal, Iterable<Item> items) {
+    void basketProvidesTotalValue(String description, String expectedTotal, Iterable<Item> items, Iterable<PricingDiscount> pricingDiscounts) {
         final Basket basket = new Basket();
         items.forEach(basket::add);
+        pricingDiscounts.forEach(basket::add);
         assertEquals(new BigDecimal(expectedTotal), basket.total());
     }
 
     static Stream<Arguments> basketProvidesTotalValue() {
         return Stream.of(
-                noItems(),
-                aSingleItemPricedPerUnit(),
-                multipleItemsPricedPerUnit(),
-                aSingleItemPricedByWeight(),
-                multipleItemsPricedByWeight()
-        );
+            noItems(),
+            aSingleItemPricedPerUnit(),
+            multipleItemsPricedPerUnit(),
+            aSingleItemPricedByWeight(),
+            multipleItemsPricedByWeight(),
+            twoPintsOfMilkWithDiscount(),
+            threePintsOfMilkWithDiscount()
+                        );
     }
 
     private static Arguments aSingleItemPricedByWeight() {
-        return Arguments.of("a single weighed item", "1.25", Collections.singleton(twoFiftyGramsOfAmericanSweets()));
+        return Arguments.of("a single weighed item", "1.25", Collections.singleton(twoFiftyGramsOfAmericanSweets()), Collections.emptyList());
     }
 
     private static Arguments multipleItemsPricedByWeight() {
         return Arguments.of("multiple weighed items", "1.85",
-                Arrays.asList(twoFiftyGramsOfAmericanSweets(), twoHundredGramsOfPickAndMix())
-        );
+                            Arrays.asList(twoFiftyGramsOfAmericanSweets(), twoHundredGramsOfPickAndMix()),
+                            Collections.emptyList()
+                           );
     }
 
     private static Arguments multipleItemsPricedPerUnit() {
         return Arguments.of("multiple items priced per unit", "2.04",
-                Arrays.asList(aPackOfDigestives(), aPintOfMilk()));
+                            Arrays.asList(aPackOfDigestives(), aPintOfMilk()), Collections.emptyList());
     }
 
     private static Arguments aSingleItemPricedPerUnit() {
-        return Arguments.of("a single item priced per unit", "0.49", Collections.singleton(aPintOfMilk()));
+        return Arguments.of("a single item priced per unit", "0.49", Collections.singleton(aPintOfMilk()), Collections.emptyList());
     }
 
     private static Arguments noItems() {
-        return Arguments.of("no items", "0.00", Collections.emptyList());
+        return Arguments.of("no items", "0.00", Collections.emptyList(), Collections.emptyList());
     }
 
     private static Item aPintOfMilk() {
@@ -78,5 +82,19 @@ class BasketTest {
 
     private static Item twoHundredGramsOfPickAndMix() {
         return aKiloOfPickAndMix().weighing(new BigDecimal(".2"));
+    }
+
+    private static Arguments twoPintsOfMilkWithDiscount() {
+        return Arguments.of("two pints of milk", "0.49",
+                            Arrays.asList(aPintOfMilk(), aPintOfMilk()),
+                            Arrays.asList(new BogofPricingDiscount())
+                           );
+    }
+
+    private static Arguments threePintsOfMilkWithDiscount() {
+        return Arguments.of("three pints of milk", "0.98",
+                            Arrays.asList(aPintOfMilk(), aPintOfMilk(), aPintOfMilk()),
+                            Arrays.asList(new BogofPricingDiscount())
+                           );
     }
 }
